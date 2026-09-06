@@ -4,197 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AxolionTeam | Premium Workspace</title>
-    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        :root {
+            --bg-dark: #02060f; --bg-navy: #061121; --navy-light: #0d1e38;
+            --tosca: #00e5ff; --tosca-glow: rgba(0, 229, 255, 0.4);
+            --black: #000000; --white: #ffffff; --gray: #8a9bb3;
+            --red: #ff3366; --green: #00e676;
+            --glass-bg: rgba(6, 17, 33, 0.65); --glass-border: rgba(0, 229, 255, 0.15);
+            --bezier: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--white); height: 100vh; overflow: hidden; position: relative; }
+        
+        .bg-glow { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; pointer-events: none; }
+        .bg-glow-1 { top: -10%; left: -10%; width: 40vw; height: 40vw; background: rgba(0, 229, 255, 0.08); }
+        .bg-glow-2 { bottom: -10%; right: -10%; width: 30vw; height: 30vw; background: rgba(13, 30, 56, 0.8); }
+
+        .app-layout { display: flex; height: 100vh; width: 100vw; position: relative; z-index: 1; }
+        
+        .sidebar { width: 280px; background: var(--bg-navy); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; padding: 30px 20px; z-index: 10; box-shadow: 5px 0 30px rgba(0,0,0,0.5); }
+        .sidebar-header { text-align: center; margin-bottom: 40px; }
+        .brand-avatar-wrapper { width: 100px; height: 100px; margin: 0 auto 15px; border-radius: 20px; background: var(--navy-light); padding: 5px; box-shadow: 0 0 20px var(--tosca-glow); }
+        .brand-avatar { width: 100%; height: 100%; object-fit: contain; border-radius: 15px; }
+        .brand-title { font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; }
+        .brand-title .highlight { color: var(--tosca); text-shadow: 0 0 10px var(--tosca-glow); }
+        
+        .nav-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .nav-btn { background: transparent; color: var(--gray); border: none; padding: 15px 20px; border-radius: 12px; font-size: 1rem; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: all 0.4s var(--bezier); text-align: left; }
+        .nav-btn:hover { background: rgba(255,255,255,0.03); color: var(--white); transform: translateX(5px); }
+        .nav-btn.active { background: linear-gradient(90deg, rgba(0,229,255,0.15) 0%, transparent 100%); color: var(--tosca); border-left: 4px solid var(--tosca); text-shadow: 0 0 8px var(--tosca-glow); }
+        .nav-btn.active i { color: var(--tosca); filter: drop-shadow(0 0 5px var(--tosca)); }
+
+        .center-stage { flex: 1; display: flex; justify-content: center; align-items: center; padding: 30px; position: relative; }
+        .glass-container { width: 100%; max-width: 1200px; height: 95%; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden; }
+        
+        .view-panel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 40px; overflow-y: auto; opacity: 0; pointer-events: none; transform: scale(0.98) translateY(15px); transition: opacity 0.5s var(--bezier), transform 0.5s var(--bezier); }
+        .view-panel.active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); }
+        
+        .view-panel h2 { font-size: 2.2rem; margin-bottom: 30px; color: var(--white); display: flex; align-items: center; gap: 15px; }
+        .view-panel h2 i { color: var(--tosca); }
+        
+        .hero-section { text-align: center; margin-top: 5vh; }
+        .hero-typo { max-width: 400px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,229,255,0.2)); }
+        
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .premium-card { background: linear-gradient(145deg, rgba(13,30,56,0.8), rgba(6,17,33,0.9)); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; transition: 0.3s var(--bezier); }
+        .premium-card:hover { border-color: rgba(0,229,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .center-card { text-align: center; }
+        .card-icon { width: 60px; height: 60px; background: rgba(0,229,255,0.1); color: var(--tosca); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 15px; }
+        
+        .premium-btn { background: var(--tosca); color: var(--black); border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; }
+        .premium-btn:hover { background: #fff; box-shadow: 0 0 20px var(--tosca-glow); transform: translateY(-2px); }
+        
+        .custom-input-group { position: relative; margin-top: 15px; }
+        .custom-input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--tosca); }
+        .custom-input-group input { width: 100%; padding: 15px 15px 15px 45px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem; outline: none; }
+        
+        .stats-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .stat-box { display: flex; justify-content: space-between; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; font-weight: 600; }
+        
+        .editor-wrapper { background: #0b101e; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
+        .editor-tab { background: #16243d; padding: 10px 20px; font-family: monospace; border-bottom: 1px solid rgba(0,229,255,0.2); color: var(--tosca); }
+        #lua-textarea { width: 100%; height: 350px; background: transparent; color: #a9c2ff; padding: 20px; border: none; outline: none; font-family: 'Consolas', monospace; resize: none; }
+        .console-box { background: #000; padding: 15px; border-top: 1px solid #222; font-family: monospace; color: #fff; min-height: 100px; }
+        
+        .text-tosca { color: var(--tosca); } .text-green { color: var(--green); } .text-red { color: var(--red); }
+    </style>
 </head>
 <body>
-    <!-- Ambient Background Glow -->
     <div class="bg-glow bg-glow-1"></div>
     <div class="bg-glow bg-glow-2"></div>
 
     <div class="app-layout">
-        <!-- Sleek Premium Sidebar -->
-        <aside class="sidebar" id="sidebar">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="brand-avatar-wrapper">
-                    <img src="assets/1000314521.png" alt="Axolion Logo" class="brand-avatar" onerror="this.src='https://via.placeholder.com/150/00e5ff/000?text=AXO'">
+                    <img src="assets/1000314521.png" alt="Logo" class="brand-avatar" onerror="this.src='https://via.placeholder.com/150/00e5ff/000?text=AXO'">
                 </div>
                 <h1 class="brand-title">AXOLION<span class="highlight">TEAM</span></h1>
-                <div class="owner-badge">
-                    <img src="assets/1000314526.png" alt="Teckyza" class="owner-avatar" onerror="this.src='https://via.placeholder.com/50/000/00e5ff?text=T'">
-                    <span>Owner: Teckyza</span>
-                </div>
             </div>
-
             <nav class="nav-menu">
-                <button class="nav-btn active" data-target="dashboard">
-                    <i class="fas fa-layer-group"></i> <span>Dashboard</span>
-                </button>
-                <button class="nav-btn" data-target="lua-editor">
-                    <i class="fas fa-code"></i> <span>Lua Editor</span>
-                </button>
-                <button class="nav-btn" data-target="uploader">
-                    <i class="fas fa-cloud-upload-alt"></i> <span>Upload Assets</span>
-                </button>
-                <button class="nav-btn" data-target="converter">
-                    <i class="fas fa-sync-alt"></i> <span>RBXM Converter</span>
-                </button>
-                <button class="nav-btn" data-target="calculator">
-                    <i class="fas fa-chart-line"></i> <span>Robux & Stats</span>
-                </button>
-                <button class="nav-btn" data-target="asset-viewer">
-                    <i class="fas fa-box-open"></i> <span>Asset Viewer</span>
-                </button>
+                <button class="nav-btn active" onclick="switchTab('dashboard')"><i class="fas fa-layer-group"></i> <span>Dashboard</span></button>
+                <button class="nav-btn" onclick="switchTab('lua-editor')"><i class="fas fa-code"></i> <span>Lua Editor</span></button>
+                <button class="nav-btn" onclick="switchTab('calculator')"><i class="fas fa-chart-line"></i> <span>Robux Calc</span></button>
             </nav>
-
-            <div class="sidebar-footer">
-                <a href="https://discord.gg/dkuXRcS2hY" target="_blank" class="social-icon discord"><i class="fab fa-discord"></i></a>
-                <a href="https://www.roblox.com/id/communities/245953568/De-Axolion#!/about" target="_blank" class="social-icon roblox"><i class="fas fa-cube"></i></a>
-            </div>
         </aside>
 
-        <!-- Center Stage: Prevents top-left spawning -->
+        <!-- MAIN CONTENT -->
         <main class="center-stage">
             <div class="glass-container">
                 
-                <!-- 1. Dashboard -->
+                <!-- DASHBOARD -->
                 <section id="dashboard" class="view-panel active">
                     <div class="hero-section">
-                        <img src="assets/1000314513.png" alt="Axolion Typo" class="hero-typo" onerror="this.style.display='none'">
                         <h2>Welcome to Next-Gen Workspace</h2>
-                        <p class="subtitle">Architecture, Lua Scripts, and Community Setup.</p>
-                    </div>
-                    
-                    <div class="premium-card center-card mt-3">
-                        <div class="card-icon"><i class="fas fa-music"></i></div>
-                        <h3>Global Music Player</h3>
-                        <p>Streamline your workflow with background audio.</p>
-                        <audio id="global-player" controls class="custom-audio">
-                            <source src="" type="audio/mpeg">
-                        </audio>
+                        <p style="color: var(--gray)">Architecture, Lua Scripts, and Community Setup.</p>
                     </div>
                 </section>
 
-                <!-- 2. Lua Editor -->
+                <!-- LUA EDITOR -->
                 <section id="lua-editor" class="view-panel">
-                    <div class="panel-header">
-                        <h2><i class="fas fa-code"></i> Lua Project Workspace</h2>
-                        <button class="premium-btn" onclick="runLuaMock()"><i class="fas fa-play"></i> Compile & Run</button>
-                    </div>
+                    <h2><i class="fas fa-code"></i> Lua Project Workspace</h2>
+                    <button class="premium-btn" onclick="runLuaMock()" style="margin-bottom: 20px;"><i class="fas fa-play"></i> Compile & Run</button>
                     <div class="editor-wrapper">
                         <div class="editor-tab">main.lua</div>
-                        <textarea id="lua-textarea" spellcheck="false">-- AxolionTeam Next-Gen Engine
-local Axolion = {}
-
-function Axolion:Initialize()
-    print("Welcome to AxolionTeam, founded by Teckyza!")
-    print("Premium UI Loaded Successfully.")
-end
-
-Axolion:Initialize()</textarea>
+                        <textarea id="lua-textarea">print("Welcome to AxolionTeam Premium UI!")</textarea>
                         <div class="console-box" id="lua-console">
-                            <span class="text-tosca">AxolionTerminal v1.0.0</span><br>
-                            > Ready for execution...
+                            <span class="text-tosca">AxolionTerminal v1.0.0</span><br>> Ready...
                         </div>
                     </div>
                 </section>
 
-                <!-- 3. Uploader -->
-                <section id="uploader" class="view-panel">
-                    <h2><i class="fas fa-cloud-upload-alt"></i> Asset Deployment</h2>
-                    <div class="grid-layout">
-                        <div class="premium-card">
-                            <div class="card-icon"><i class="fas fa-headphones-alt"></i></div>
-                            <h3>Upload Music</h3>
-                            <div class="file-drop-area">
-                                <i class="fas fa-file-audio text-tosca mb-1" style="font-size: 2rem;"></i>
-                                <p>Drag & Drop MP3/OGG</p>
-                                <input type="file" id="music-file" accept="audio/mp3, audio/ogg">
-                            </div>
-                            <button class="premium-btn w-100 mt-2" onclick="uploadData('music')">Deploy Audio</button>
-                        </div>
-                        <div class="premium-card">
-                            <div class="card-icon"><i class="fas fa-cubes"></i></div>
-                            <h3>Upload Models/Images</h3>
-                            <div class="file-drop-area">
-                                <i class="fas fa-file-image text-tosca mb-1" style="font-size: 2rem;"></i>
-                                <p>Drag & Drop Assets</p>
-                                <input type="file" id="general-asset-file">
-                            </div>
-                            <button class="premium-btn w-100 mt-2" onclick="uploadData('general')">Deploy Asset</button>
-                        </div>
-                    </div>
-                    <div id="upload-status" class="status-indicator"></div>
-                </section>
-
-                <!-- 4. Converter -->
-                <section id="converter" class="view-panel">
-                    <div class="panel-header">
-                        <h2><i class="fas fa-sync-alt"></i> Studio File Converter</h2>
-                    </div>
-                    <div class="premium-card center-card">
-                        <div class="card-icon glowing"><i class="fas fa-exchange-alt"></i></div>
-                        <h3>RBXM to RBXL Engine</h3>
-                        <p>Convert Roblox Model structures into full standalone Place files instantly.</p>
-                        <div class="file-drop-area mt-2 mx-auto" style="max-width: 400px;">
-                            <input type="file" id="rbxm-file" accept=".rbxm">
-                            <p>Select .rbxm File</p>
-                        </div>
-                        <button class="premium-btn mt-2" onclick="convertRbxm()"><i class="fas fa-cogs"></i> Start Conversion</button>
-                        <div id="convert-status" class="status-indicator mt-2"></div>
-                    </div>
-                </section>
-
-                <!-- 5. Calculator -->
+                <!-- CALCULATOR -->
                 <section id="calculator" class="view-panel">
-                    <h2><i class="fas fa-chart-line"></i> Economy & Taxation</h2>
-                    <div class="grid-layout">
-                        <div class="premium-card">
-                            <h3>Robux Tax Calculator</h3>
-                            <div class="custom-input-group mt-2">
-                                <i class="fas fa-coins"></i>
-                                <input type="number" id="robux-input" placeholder="Enter Robux amount..." oninput="calculateRobux()">
-                            </div>
-                            <div class="stats-grid mt-2">
-                                <div class="stat-box">
-                                    <span class="label">Tax (30%)</span>
-                                    <span class="value text-red" id="tax-amount">0 R$</span>
-                                </div>
-                                <div class="stat-box">
-                                    <span class="label">Net (70%)</span>
-                                    <span class="value text-green" id="net-amount">0 R$</span>
-                                </div>
-                                <div class="stat-box highlight-box">
-                                    <span class="label">DevEx (USD)</span>
-                                    <span class="value text-tosca" id="devex-amount">$0.00</span>
-                                </div>
-                            </div>
+                    <h2><i class="fas fa-chart-line"></i> Robux Tax Calculator</h2>
+                    <div class="premium-card">
+                        <div class="custom-input-group">
+                            <i class="fas fa-coins"></i>
+                            <input type="number" id="robux-input" placeholder="Masukkan jumlah Robux..." oninput="calculateRobux()">
                         </div>
-                        <div class="premium-card">
-                            <h3>Roblox Inflation Index</h3>
-                            <div class="chart-container">
-                                <canvas id="inflationChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 6. Asset Viewer -->
-                <section id="asset-viewer" class="view-panel">
-                    <h2><i class="fas fa-box-open"></i> Asset Database Viewer</h2>
-                    <div class="premium-card center-card mx-auto" style="max-width: 600px;">
-                        <p class="mb-2">Search marketplace ID to retrieve data from Axolion API.</p>
-                        <div class="search-bar">
-                            <input type="number" id="asset-id" placeholder="Enter Asset ID (e.g. 1818)">
-                            <button class="search-btn" onclick="fetchAsset()"><i class="fas fa-search"></i></button>
-                        </div>
-                        <div id="asset-result" class="asset-preview-box mt-3">
-                            <!-- Injected by JS -->
+                        <div class="stats-grid">
+                            <div class="stat-box"><span style="color:var(--gray)">Tax (30%)</span><span id="tax-amount" class="text-red">0 R$</span></div>
+                            <div class="stat-box"><span style="color:var(--gray)">Net (70%)</span><span id="net-amount" class="text-green">0 R$</span></div>
+                            <div class="stat-box" style="border: 1px solid var(--tosca)"><span style="color:var(--gray)">DevEx (USD)</span><span id="devex-amount" class="text-tosca">$0.00</span></div>
                         </div>
                     </div>
                 </section>
@@ -203,6 +140,37 @@ Axolion:Initialize()</textarea>
         </main>
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Fungsi Pindah Halaman
+        function switchTab(targetId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(targetId).classList.add('active');
+        }
+
+        // Fungsi Kalkulator Robux
+        function calculateRobux() {
+            let val = parseInt(document.getElementById('robux-input').value) || 0;
+            let tax = Math.floor(val * 0.3);
+            let net = val - tax;
+            let devex = (net * 0.0035).toFixed(2);
+            
+            document.getElementById('tax-amount').innerText = `- ${tax} R$`;
+            document.getElementById('net-amount').innerText = `${net} R$`;
+            document.getElementById('devex-amount').innerText = `$${devex} USD`;
+        }
+
+        // Fungsi Terminal Lua
+        function runLuaMock() {
+            document.getElementById('lua-console').innerHTML = `
+                <span class="text-tosca">AxolionTerminal v1.0.0</span><br>
+                > Compiling syntax...<br>
+                > <span class="text-green">Success! UI Premium berjalan sempurna.</span>
+            `;
+        }
+    </script>
 </body>
 </html>
