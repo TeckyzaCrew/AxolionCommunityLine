@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AxolionTeam | Premium Workspace</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Ambient Background Glow -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="app-layout">
+        <!-- Sleek Premium Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-avatar-wrapper">
+                    <img src="assets/1000314521.png" alt="Axolion Logo" class="brand-avatar" onerror="this.src='https://via.placeholder.com/150/00e5ff/000?text=AXO'">
+                </div>
+                <h1 class="brand-title">AXOLION<span class="highlight">TEAM</span></h1>
+                <div class="owner-badge">
+                    <img src="assets/1000314526.png" alt="Teckyza" class="owner-avatar" onerror="this.src='https://via.placeholder.com/50/000/00e5ff?text=T'">
+                    <span>Owner: Teckyza</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-target="dashboard">
+                    <i class="fas fa-layer-group"></i> <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" data-target="lua-editor">
+                    <i class="fas fa-code"></i> <span>Lua Editor</span>
+                </button>
+                <button class="nav-btn" data-target="uploader">
+                    <i class="fas fa-cloud-upload-alt"></i> <span>Upload Assets</span>
+                </button>
+                <button class="nav-btn" data-target="converter">
+                    <i class="fas fa-sync-alt"></i> <span>RBXM Converter</span>
+                </button>
+                <button class="nav-btn" data-target="calculator">
+                    <i class="fas fa-chart-line"></i> <span>Robux & Stats</span>
+                </button>
+                <button class="nav-btn" data-target="asset-viewer">
+                    <i class="fas fa-box-open"></i> <span>Asset Viewer</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="https://discord.gg/dkuXRcS2hY" target="_blank" class="social-icon discord"><i class="fab fa-discord"></i></a>
+                <a href="https://www.roblox.com/id/communities/245953568/De-Axolion#!/about" target="_blank" class="social-icon roblox"><i class="fas fa-cube"></i></a>
+            </div>
+        </aside>
+
+        <!-- Center Stage: Prevents top-left spawning -->
+        <main class="center-stage">
+            <div class="glass-container">
+                
+                <!-- 1. Dashboard -->
+                <section id="dashboard" class="view-panel active">
+                    <div class="hero-section">
+                        <img src="assets/1000314513.png" alt="Axolion Typo" class="hero-typo" onerror="this.style.display='none'">
+                        <h2>Welcome to Next-Gen Workspace</h2>
+                        <p class="subtitle">Architecture, Lua Scripts, and Community Setup.</p>
+                    </div>
+                    
+                    <div class="premium-card center-card mt-3">
+                        <div class="card-icon"><i class="fas fa-music"></i></div>
+                        <h3>Global Music Player</h3>
+                        <p>Streamline your workflow with background audio.</p>
+                        <audio id="global-player" controls class="custom-audio">
+                            <source src="" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </section>
+
+                <!-- 2. Lua Editor -->
+                <section id="lua-editor" class="view-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-code"></i> Lua Project Workspace</h2>
+                        <button class="premium-btn" onclick="runLuaMock()"><i class="fas fa-play"></i> Compile & Run</button>
+                    </div>
+                    <div class="editor-wrapper">
+                        <div class="editor-tab">main.lua</div>
+                        <textarea id="lua-textarea" spellcheck="false">-- AxolionTeam Next-Gen Engine
+local Axolion = {}
+
+function Axolion:Initialize()
+    print("Welcome to AxolionTeam, founded by Teckyza!")
+    print("Premium UI Loaded Successfully.")
+end
+
+Axolion:Initialize()</textarea>
+                        <div class="console-box" id="lua-console">
+                            <span class="text-tosca">AxolionTerminal v1.0.0</span><br>
+                            > Ready for execution...
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Uploader -->
+                <section id="uploader" class="view-panel">
+                    <h2><i class="fas fa-cloud-upload-alt"></i> Asset Deployment</h2>
+                    <div class="grid-layout">
+                        <div class="premium-card">
+                            <div class="card-icon"><i class="fas fa-headphones-alt"></i></div>
+                            <h3>Upload Music</h3>
+                            <div class="file-drop-area">
+                                <i class="fas fa-file-audio text-tosca mb-1" style="font-size: 2rem;"></i>
+                                <p>Drag & Drop MP3/OGG</p>
+                                <input type="file" id="music-file" accept="audio/mp3, audio/ogg">
+                            </div>
+                            <button class="premium-btn w-100 mt-2" onclick="uploadData('music')">Deploy Audio</button>
+                        </div>
+                        <div class="premium-card">
+                            <div class="card-icon"><i class="fas fa-cubes"></i></div>
+                            <h3>Upload Models/Images</h3>
+                            <div class="file-drop-area">
+                                <i class="fas fa-file-image text-tosca mb-1" style="font-size: 2rem;"></i>
+                                <p>Drag & Drop Assets</p>
+                                <input type="file" id="general-asset-file">
+                            </div>
+                            <button class="premium-btn w-100 mt-2" onclick="uploadData('general')">Deploy Asset</button>
+                        </div>
+                    </div>
+                    <div id="upload-status" class="status-indicator"></div>
+                </section>
+
+                <!-- 4. Converter -->
+                <section id="converter" class="view-panel">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-sync-alt"></i> Studio File Converter</h2>
+                    </div>
+                    <div class="premium-card center-card">
+                        <div class="card-icon glowing"><i class="fas fa-exchange-alt"></i></div>
+                        <h3>RBXM to RBXL Engine</h3>
+                        <p>Convert Roblox Model structures into full standalone Place files instantly.</p>
+                        <div class="file-drop-area mt-2 mx-auto" style="max-width: 400px;">
+                            <input type="file" id="rbxm-file" accept=".rbxm">
+                            <p>Select .rbxm File</p>
+                        </div>
+                        <button class="premium-btn mt-2" onclick="convertRbxm()"><i class="fas fa-cogs"></i> Start Conversion</button>
+                        <div id="convert-status" class="status-indicator mt-2"></div>
+                    </div>
+                </section>
+
+                <!-- 5. Calculator -->
+                <section id="calculator" class="view-panel">
+                    <h2><i class="fas fa-chart-line"></i> Economy & Taxation</h2>
+                    <div class="grid-layout">
+                        <div class="premium-card">
+                            <h3>Robux Tax Calculator</h3>
+                            <div class="custom-input-group mt-2">
+                                <i class="fas fa-coins"></i>
+                                <input type="number" id="robux-input" placeholder="Enter Robux amount..." oninput="calculateRobux()">
+                            </div>
+                            <div class="stats-grid mt-2">
+                                <div class="stat-box">
+                                    <span class="label">Tax (30%)</span>
+                                    <span class="value text-red" id="tax-amount">0 R$</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="label">Net (70%)</span>
+                                    <span class="value text-green" id="net-amount">0 R$</span>
+                                </div>
+                                <div class="stat-box highlight-box">
+                                    <span class="label">DevEx (USD)</span>
+                                    <span class="value text-tosca" id="devex-amount">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="premium-card">
+                            <h3>Roblox Inflation Index</h3>
+                            <div class="chart-container">
+                                <canvas id="inflationChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Asset Viewer -->
+                <section id="asset-viewer" class="view-panel">
+                    <h2><i class="fas fa-box-open"></i> Asset Database Viewer</h2>
+                    <div class="premium-card center-card mx-auto" style="max-width: 600px;">
+                        <p class="mb-2">Search marketplace ID to retrieve data from Axolion API.</p>
+                        <div class="search-bar">
+                            <input type="number" id="asset-id" placeholder="Enter Asset ID (e.g. 1818)">
+                            <button class="search-btn" onclick="fetchAsset()"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="asset-result" class="asset-preview-box mt-3">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
